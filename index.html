@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
-<!-- saved from url=(0155)https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/9118ba0073f06acf4d2d22c8a9695a8c/9e64852b-bc54-4fa0-b56b-62b8cda56852/0eb54730.html -->
-<html lang="zh-HK"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>圍棋學習平台 - Desmond Ma 專屬訓練</title>
-    <link rel="stylesheet" href="./圍棋學習平台 - Desmond Ma 專屬訓練_files/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app">
@@ -43,193 +44,289 @@
                     <!-- 遊戲控制 -->
                     <div class="game-controls">
                         <div class="control-group">
-                            <label>棋盤大小:</label>
-                            <select id="board-size" class="control-select">
-                                <option value="9">9×9 (推薦)</option>
-                                <option value="13">13×13</option>
-                                <option value="19">19×19</option>
+                            <label>棋盤大小</label>
+                            <select id="board-size" class="form-control control-select">
+                                <option value="9">9×9 (初學推薦)</option>
+                                <option value="13">13×13 (中級)</option>
+                                <option value="19">19×19 (標準)</option>
                             </select>
                         </div>
-
                         <div class="control-group">
-                            <label>AI難度:</label>
-                            <select id="ai-difficulty" class="control-select">
-                                <option value="1">初學 (推薦)</option>
-                                <option value="2">簡單</option>
-                                <option value="3">中等</option>
-                                <option value="4">困難</option>
+                            <label>AI 引擎</label>
+                            <select id="ai-engine" class="form-control control-select">
+                                <option value="basic">快速 AI (推薦)</option>
+                                <option value="katago">KataGo (最強)</option>
+                                <option value="elfogo">ELF OpenGo</option>
+                                <option value="phoenixgo">PhoenixGo</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>難度設定</label>
+                            <select id="ai-difficulty" class="form-control control-select">
+                                <option value="1">初級 (適合30-21級)</option>
+                                <option value="2">中級 (適合20-11級)</option>
+                                <option value="3">高級 (適合10-1級)</option>
+                                <option value="4">段位 (段位挑戰)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>學習模式</label>
+                            <select id="learning-mode" class="form-control control-select">
+                                <option value="guided">指導模式</option>
+                                <option value="free">自由對弈</option>
+                                <option value="puzzle">死活練習</option>
+                                <option value="review">複盤分析</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <div class="control-right">
-                    <!-- 修復版功能按鈕 -->
-                    <div class="function-buttons">
-                        <button class="primary-btn" id="new-game-btn" onclick="startNewGame()">
-                            🎮 新對局
-                        </button>
-
-                        <button class="hint-btn" id="hint-btn" onclick="showHint()" title="獲取提示">
-                            💡 提示
-                        </button>
-
-                        <!-- 修復的更多功能下拉選單 -->
-                        <div class="dropdown-container">
-                            <button class="more-functions-btn" id="more-functions-btn" onclick="toggleMoreFunctions(event)">
+                    <!-- 操作按鈕 -->
+                    <div class="action-buttons">
+                        <button id="hint-btn" class="btn btn--secondary btn--lg">💡 AI 提示</button>
+                        <button id="analysis-btn" class="btn btn--outline btn--lg">📊 即時分析</button>
+                        <button id="new-game-btn" class="btn btn--primary btn--lg">🆕 新局對弈</button>
+                        
+                        <!-- 更多功能下拉選單 - 確保可見 -->
+                        <div class="more-functions-dropdown">
+                            <button id="more-functions-toggle" class="btn btn--outline btn--lg more-functions-btn">
                                 ⚙️ 更多功能 ▼
                             </button>
-                            <div class="dropdown-menu" id="more-functions-menu">
-                                <button class="dropdown-item" onclick="openGameAnalysis()">📊 復盤分析</button>
-                                <button class="dropdown-item" onclick="enterLearningMode()">📚 學習模式</button>
-                                <button class="dropdown-item" onclick="openLifeDeathPractice()">⚔️ 死活練習</button>
-                                <button class="dropdown-item" onclick="openJosekiLearning()">📖 定式學習</button>
-                                <button class="dropdown-item" onclick="openRankExamination()">🎯 段位考試</button>
-                                <button class="dropdown-item" onclick="openSettings()">⚙️ 設定選項</button>
-                                <button class="dropdown-item" onclick="openHelp()">❓ 幫助文檔</button>
+                            <div id="more-functions-menu" class="more-functions-content">
+                                <button id="game-analysis-btn" class="more-functions-item">
+                                    📊 復盤分析
+                                </button>
+                                <button id="learning-mode-btn" class="more-functions-item">
+                                    📚 學習模式
+                                </button>
+                                <button id="life-death-btn" class="more-functions-item">
+                                    ⚫ 死活練習
+                                </button>
+                                <button id="joseki-learning-btn" class="more-functions-item">
+                                    🎯 定式學習
+                                </button>
+                                <button id="rank-exam-btn" class="more-functions-item">
+                                    🏆 段位考試
+                                </button>
+                                <button id="settings-btn" class="more-functions-item">
+                                    ⚙️ 設定選項
+                                </button>
+                                <button id="help-docs-btn" class="more-functions-item">
+                                    ❓ 幫助文檔
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </header>
 
-            <!-- 主要內容區域 -->
-            <main class="main-content">
-                <!-- 左側技能樹 -->
-                <aside class="skill-tree-panel">
+            <!-- 主遊戲區域 -->
+            <div class="main-game-area">
+                <!-- 左側技能樹面板 - 常駐顯示 -->
+                <div class="skill-tree-panel">
                     <div class="panel-header">
-                        <h3>🌳 技能樹</h3>
-                    </div>
-                    <div class="skill-tree">
-                        <!-- 30級技能 -->
-                        <div class="skill-node active" data-level="30級">
-                            <div class="skill-icon">🎯</div>
-                            <div class="skill-info">
-                                <h4>30級</h4>
-                                <div class="skill-list">
-                                    <span class="skill-item">基本規則</span>
-                                    <span class="skill-item">氣的概念</span>
-                                    <span class="skill-item">提子方法</span>
-                                </div>
-                                <div class="skill-progress">進度: 0/3</div>
-                            </div>
-                        </div>
-
-                        <!-- 29級技能 -->
-                        <div class="skill-node locked" data-level="29級">
-                            <div class="skill-icon">🔒</div>
-                            <div class="skill-info">
-                                <h4>29級</h4>
-                                <div class="skill-list">
-                                    <span class="skill-item">認識眼位</span>
-                                    <span class="skill-item">簡單連接</span>
-                                </div>
-                                <div class="unlock-condition">完成30級所有技能</div>
-                            </div>
-                        </div>
-
-                        <!-- 更多級別 -->
-                        <div class="skill-node locked" data-level="28級">
-                            <div class="skill-icon">🔒</div>
-                            <div class="skill-info">
-                                <h4>28級</h4>
-                                <p>基本死活技能</p>
+                        <h3>🌳 Desmond 的技能樹</h3>
+                        <div class="level-progress">
+                            <span class="current-level">當前 30級</span>
+                            <div class="progress-mini">
+                                <div class="progress-fill" id="mini-progress"></div>
                             </div>
                         </div>
                     </div>
-                </aside>
+                    <div class="skill-content" id="skill-tree-content">
+                        <!-- 技能樹內容將通過 JavaScript 動態生成 -->
+                    </div>
+                </div>
 
                 <!-- 中央棋盤區域 -->
-                <section class="board-container">
+                <div class="board-area">
                     <div class="board-header">
-                        <div class="game-status" id="game-status">
-                            <span class="current-turn" id="current-turn">黑棋先行</span>
-                            <span class="timer" id="game-timer">00:00</span>
+                        <div class="game-status">
+                            <div class="current-turn" id="current-player">
+                                <span class="turn-indicator">●</span>
+                                <span class="turn-text">黑棋先行 (Desmond)</span>
+                            </div>
+                            <div class="captured-info" id="captured-stones">
+                                提子：黑0 白0
+                            </div>
+                            <div class="game-timer" id="game-timer">
+                                對局時間：00:00
+                            </div>
                         </div>
-                        <div class="ai-status" id="ai-status" style="display: none;">
-                            <span class="ai-thinking">🤔 AI思考中...</span>
+                    </div>
+                    
+                    <div class="board-container">
+                        <canvas id="go-board" width="680" height="680"></canvas>
+                        <div class="board-controls">
+                            <button id="pass-btn" class="btn btn--secondary btn--lg">放棄一手</button>
+                            <button id="resign-btn" class="btn btn--outline btn--lg">認輸投降</button>
+                            <button id="undo-btn" class="btn btn--secondary btn--lg">悔棋一手</button>
                         </div>
                     </div>
-
-                    <!-- 圍棋棋盤 -->
-                    <div class="board-wrapper">
-                        <div class="board" id="go-board"></div>
+                    
+                    <!-- AI 分析提示 -->
+                    <div class="ai-analysis" id="ai-analysis">
+                        <div class="analysis-header">
+                            <span class="analysis-icon">🤖</span>
+                            <span class="analysis-title">快速 AI 即時分析</span>
+                        </div>
+                        <div class="analysis-content" id="analysis-content">
+                            <div class="analysis-item">
+                                <span class="label">勝率評估：</span>
+                                <span class="value" id="win-rate-analysis">黑棋 50%</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="label">推薦著手：</span>
+                                <span class="value" id="best-move">天元</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="label">局面評價：</span>
+                                <span class="value" id="position-eval">均勢</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="label">AI 響應：</span>
+                                <span class="value" style="color: var(--color-success);">< 2秒快速思考</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- 遊戲控制按鈕 -->
-                    <div class="board-controls">
-                        <button class="control-btn" id="pass-btn" onclick="passMove()">過 (Pass)</button>
-                        <button class="control-btn" id="resign-btn" onclick="resignGame()">認輸</button>
-                        <button class="control-btn" id="undo-btn" onclick="undoMove()">悔棋</button>
-                    </div>
-                </section>
+                </div>
 
                 <!-- 右側信息面板 -->
-                <aside class="info-panel">
+                <div class="side-panel" id="side-panel">
                     <div class="panel-header">
-                        <h3>📋 對局信息</h3>
+                        <h3 id="panel-title">對局記錄</h3>
+                        <button id="close-panel" class="btn btn--sm">✕</button>
                     </div>
-
-                    <!-- 當前提示 -->
-                    <div class="hint-section">
-                        <h4>💡 當前提示</h4>
-                        <div class="hint-content" id="current-hint">
-                            初學階段建議使用 9×9 棋盤，學習基本規則和概念
-                        </div>
-                    </div>
-
-                    <!-- 成就展示 -->
-                    <div class="achievement-section">
-                        <h4>🏆 成就進度</h4>
-                        <div class="achievement-list" id="achievement-list">
-                            <div class="achievement-item locked">
-                                <span class="achievement-icon">🏁</span>
-                                <div class="achievement-info">
-                                    <div class="achievement-name">初次對弈</div>
-                                    <div class="achievement-desc">完成人生第一盤圍棋</div>
-                                </div>
-                            </div>
-                            <div class="achievement-item locked">
-                                <span class="achievement-icon">📚</span>
-                                <div class="achievement-info">
-                                    <div class="achievement-name">學習狂熱者</div>
-                                    <div class="achievement-desc">完成10個教學模組</div>
+                    <div class="panel-content" id="panel-content">
+                        <div class="game-history">
+                            <h4>最近對局</h4>
+                            <div class="history-list" id="history-list">
+                                <!-- 記錄將通過 JavaScript 動態生成 -->
+                                <div class="no-history">
+                                    <p style="text-align: center; color: var(--color-text-secondary); font-size: 16px; padding: 20px;">
+                                        🎯 還沒有對局記錄<br>
+                                        開始第一局對弈吧！
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- 歷史記錄 -->
-                    <div class="history-section">
-                        <h4>📊 對戰歷史</h4>
-                        <div class="history-list" id="game-history">
-                            <div class="empty-state">
-                                暫無對戰記錄<br>
-                                開始你的第一局對弈！
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-            </main>
+                </div>
+            </div>
         </div>
 
-        <!-- 模態對話框 -->
-        <div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
-            <div class="modal-content" onclick="event.stopPropagation()">
-                <div class="modal-header">
-                    <h3 id="modal-title">標題</h3>
-                    <button class="modal-close" onclick="closeModal()">×</button>
+        <!-- 功能彈窗模組 -->
+        <div id="function-modal" class="modal">
+            <div class="modal-content function-content">
+                <h3 id="function-modal-title">功能模組</h3>
+                <div id="function-modal-content"></div>
+                <button id="close-function-modal" class="btn btn--primary btn--lg">關閉</button>
+            </div>
+        </div>
+
+        <!-- 成就獲得彈窗 -->
+        <div id="achievement-modal" class="modal">
+            <div class="modal-content achievement-content">
+                <h2>🏆 獲得成就！</h2>
+                <div id="achievement-content"></div>
+                <button id="close-achievement-modal" class="btn btn--primary btn--lg">繼續努力</button>
+            </div>
+        </div>
+
+        <!-- AI 詳細提示彈窗 -->
+        <div id="hint-modal" class="modal">
+            <div class="modal-content hint-content">
+                <h3>💡 快速 AI 建議</h3>
+                <div id="hint-modal-content"></div>
+                <button id="close-hint-modal" class="btn btn--primary btn--lg">明白了</button>
+            </div>
+        </div>
+
+        <!-- 複盤分析彈窗 -->
+        <div id="review-modal" class="modal">
+            <div class="modal-content review-content">
+                <h3>📊 深度複盤分析</h3>
+                <div id="review-modal-content">
+                    <div class="review-stats">
+                        <h4>Desmond 的對局統計</h4>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="total-games">0</div>
+                                <div class="stat-label">總對局數</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="win-percentage">0%</div>
+                                <div class="stat-label">勝率</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="avg-exp">0</div>
+                                <div class="stat-label">平均經驗</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="best-streak">0</div>
+                                <div class="stat-label">最佳連勝</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="improvement-section">
+                        <h4>AI 改進建議</h4>
+                        <ul id="improvement-list">
+                            <li>✨ 建議先學習圍棋基本規則和氣的概念</li>
+                            <li>✨ 在9×9棋盤上練習基本連接和提子技巧</li>
+                            <li>✨ 掌握簡單的死活判斷，了解棋子的生存條件</li>
+                        </ul>
+                    </div>
+                    <div class="performance-section">
+                        <h4>🚀 系統性能優化</h4>
+                        <div class="performance-stats">
+                            <div class="perf-item">
+                                <span class="perf-label">AI 響應時間：</span>
+                                <span class="perf-value" style="color: var(--color-success);">< 2秒</span>
+                            </div>
+                            <div class="perf-item">
+                                <span class="perf-label">勝負判定：</span>
+                                <span class="perf-value" style="color: var(--color-success);">準確計算</span>
+                            </div>
+                            <div class="perf-item">
+                                <span class="perf-label">記錄追蹤：</span>
+                                <span class="perf-value" style="color: var(--color-success);">完整保存</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body" id="modal-body">
-                    內容
-                </div>
-                <div class="modal-footer" id="modal-footer">
-                    <button class="btn-secondary" onclick="closeModal()">關閉</button>
-                </div>
+                <button id="close-review-modal" class="btn btn--primary btn--lg">關閉分析</button>
+            </div>
+        </div>
+
+        <!-- 升段祝賀彈窗 -->
+        <div id="rank-up-modal" class="modal">
+            <div class="modal-content rank-up-content">
+                <div class="celebration">🎉</div>
+                <h2>恭喜 Desmond 升段！</h2>
+                <p id="rank-up-text"></p>
+                <div class="rank-requirements" id="rank-requirements"></div>
+                <button id="close-modal" class="btn btn--primary btn--lg">繼續挑戰</button>
+            </div>
+        </div>
+
+        <!-- 狀態指示器 -->
+        <div class="status-indicators">
+            <div class="status-item">
+                <div class="status-icon">⚡</div>
+                <div class="status-text">AI 快速響應</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">🎯</div>
+                <div class="status-text">準確勝負判定</div>
+            </div>
+            <div class="status-item">
+                <div class="status-icon">📊</div>
+                <div class="status-text">完整記錄追蹤</div>
             </div>
         </div>
     </div>
 
-    <script src="./圍棋學習平台 - Desmond Ma 專屬訓練_files/app.js.download"></script>
-
-</body></html>
+    <script src="app.js"></script>
+</body>
+</html>
